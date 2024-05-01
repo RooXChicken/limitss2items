@@ -1,4 +1,4 @@
-package com.rooxchicken.limits2;
+package com.rooxchicken.limits2.Items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+
+import com.rooxchicken.limits2.LimitsPlugin;
+
 import org.bukkit.entity.Player;
 
 public class SkulkShield implements Listener
@@ -86,7 +89,6 @@ public class SkulkShield implements Listener
             player.getWorld().spawnParticle(Particle.SONIC_BOOM, boom, 1, 0.05, 0.05, 0.05, 0);
         }
 
-        player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
 

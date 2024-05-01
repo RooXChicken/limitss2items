@@ -1,4 +1,4 @@
-package com.rooxchicken.limits2;
+package com.rooxchicken.limits2.Items;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -21,6 +21,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.checkerframework.checker.units.qual.mol;
+
+import com.rooxchicken.limits2.LimitsPlugin;
+
 import org.bukkit.entity.Player;
 
 public class MoltenAxe implements Listener

@@ -1,4 +1,4 @@
-package com.rooxchicken.limits2;
+package com.rooxchicken.limits2.Commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

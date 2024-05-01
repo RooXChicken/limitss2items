@@ -1,4 +1,4 @@
-package com.rooxchicken.limits2;
+package com.rooxchicken.limits2.Commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+
+import com.rooxchicken.limits2.LimitsPlugin;
 
 public class ResetCooldown implements CommandExecutor
 {

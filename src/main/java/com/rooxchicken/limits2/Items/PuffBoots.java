@@ -1,4 +1,4 @@
-package com.rooxchicken.limits2;
+package com.rooxchicken.limits2.Items;
 
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
@@ -14,6 +14,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+
+import com.rooxchicken.limits2.LimitsPlugin;
+
 import org.bukkit.entity.Player;
 
 public class PuffBoots implements Listener
@@ -108,7 +111,7 @@ public class PuffBoots implements Listener
         {
             if(boots.getItemMeta().getDisplayName().equals("Â§fÂ§lÂ§oPuff Boots"))
             {
-                message = "â˜ ";
+                message = "âÿÿ ";
                 if(puffBootsCooldown <= 0)
                     message += "READY";
                 else

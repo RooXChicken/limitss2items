@@ -1,4 +1,4 @@
-package com.rooxchicken.limits2;
+package com.rooxchicken.limits2.Items;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,6 +18,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+
+import com.rooxchicken.limits2.LimitsPlugin;
 
 public class IceSword implements Listener
 {
