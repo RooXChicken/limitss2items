@@ -118,9 +118,9 @@ public class MoltenAxe implements Listener
                     message += "READY";
                 else
                     message += (moltenAxeCooldown/LimitsPlugin.scheduleScale+1) + "s";
-            }
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 19, 0, true));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 19, 0, true));
+            }
         }
 
         return message;

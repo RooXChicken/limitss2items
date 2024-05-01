@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -142,6 +143,7 @@ public class IceSword implements Listener
 
     public String handleFreezeTime(Player player, PersistentDataContainer container)
     {
+        boolean hasSword = false;
         String message = "";
         if(!container.has(LimitsPlugin.iceSwordCooldownKey, PersistentDataType.INTEGER))
             container.set(LimitsPlugin.iceSwordCooldownKey, PersistentDataType.INTEGER, 0);
@@ -163,7 +165,22 @@ public class IceSword implements Listener
                     message += "READY";
                 else
                     message += (iceSwordCooldown/LimitsPlugin.scheduleScale+1) + "s";
+
+                hasSword = true;
             }
+        }
+
+        if(!hasSword)
+        {
+            ItemStack boots = player.getInventory().getBoots();
+            if(boots != null && boots.containsEnchantment(Enchantment.FROST_WALKER))
+                boots.removeEnchantment(Enchantment.FROST_WALKER);
+        }
+        else
+        {
+            ItemStack boots = player.getInventory().getBoots();
+            if(boots != null && !boots.containsEnchantment(Enchantment.FROST_WALKER))
+                boots.addEnchantment(Enchantment.FROST_WALKER, 2);
         }
 
         return message;
