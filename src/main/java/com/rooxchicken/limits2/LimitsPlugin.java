@@ -117,16 +117,17 @@ public class LimitsPlugin extends JavaPlugin implements Listener
                     else
                         finalMessage += iceSwordMessage;
 
-                    if(finalMessage != "" && skulkShieldMessage != "")
-                        finalMessage += " | " + skulkShieldMessage;
-                    else
-                        finalMessage += skulkShieldMessage;
-
+                        
                     if(finalMessage != "" && moltenAxeMessage != "")
                         finalMessage += " | " + moltenAxeMessage;
                     else
                         finalMessage += moltenAxeMessage;
-
+                        
+                    if(finalMessage != "" && skulkShieldMessage != "")
+                        finalMessage += " | " + skulkShieldMessage;
+                    else
+                        finalMessage += skulkShieldMessage;
+                    
                     if(finalMessage != "")
                         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(finalMessage));
                 }

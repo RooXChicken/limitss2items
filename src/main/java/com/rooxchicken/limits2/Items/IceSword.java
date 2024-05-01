@@ -1,6 +1,7 @@
 package com.rooxchicken.limits2.Items;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
@@ -157,7 +158,7 @@ public class IceSword implements Listener
         {
             if(hand.getItemMeta().getDisplayName().equals("§b§l§oIce Sword"))
             {
-                message = "❄ ";
+                message = ChatColor.AQUA + "❄ ";
                 if(iceSwordCooldown <= 0)
                     message += "READY";
                 else

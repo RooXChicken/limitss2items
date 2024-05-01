@@ -1,5 +1,6 @@
 package com.rooxchicken.limits2.Items;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -110,7 +111,7 @@ public class PuffBoots implements Listener
         {
             if(boots.getItemMeta().getDisplayName().equals("§f§l§oPuff Boots"))
             {
-                message = "☁ ";
+                message = ChatColor.WHITE + "☁ ";
                 if(puffBootsCooldown <= 0)
                     message += "READY";
                 else

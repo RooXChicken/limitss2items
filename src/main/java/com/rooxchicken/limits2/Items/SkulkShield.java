@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -167,7 +168,7 @@ public class SkulkShield implements Listener
         {
             if(shield.getItemMeta().getDisplayName().equals("§1§l§oSkulk Shield"))
             {
-                message = "🛡 ";
+                message = ChatColor.DARK_BLUE + "🛡 ";
                 if(skulkShieldCooldown <= 0)
                     message += "READY";
                 else

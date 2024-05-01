@@ -24,6 +24,8 @@ import org.checkerframework.checker.units.qual.mol;
 
 import com.rooxchicken.limits2.LimitsPlugin;
 
+import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.entity.Player;
 
 public class MoltenAxe implements Listener
@@ -54,7 +56,7 @@ public class MoltenAxe implements Listener
     }
 
     @EventHandler
-    public void activateDoubleJump(PlayerInteractEvent event)
+    public void onAxeUse(PlayerInteractEvent event)
     {
         Player player = event.getPlayer();
 
@@ -64,7 +66,7 @@ public class MoltenAxe implements Listener
         if(event.getItem() == null || !event.getItem().hasItemMeta())
             return;
 
-        if(player.isSneaking() && player.getInventory().getItemInOffHand() != null && player.getInventory().getItemInOffHand().getItemMeta().getDisplayName().equals("§1§l§oSkulk Shield"))
+        if((player.getInventory().getItemInOffHand() != null && player.getInventory().getItemInOffHand().hasItemMeta() && player.getInventory().getItemInOffHand().getItemMeta().getDisplayName().equals("§1§l§oSkulk Shield")) && player.isSneaking())
             return;
 
         if(event.getItem().getItemMeta().getDisplayName().equals("§x§F§F§7§7§0§0§l§oMolten Axe"))
@@ -111,7 +113,7 @@ public class MoltenAxe implements Listener
         {
             if(axe.getItemMeta().getDisplayName().equals("§x§F§F§7§7§0§0§l§oMolten Axe"))
             {
-                message = "⚡ ";
+                message = "§x§F§F§7§7§0§0⚡ ";
                 if(moltenAxeCooldown <= 0)
                     message += "READY";
                 else
