@@ -18,8 +18,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
@@ -39,6 +41,24 @@ public class SkulkShield implements Listener
     public SkulkShield(Plugin _plugin)
     {
         plugin = _plugin;
+    }
+
+    @EventHandler
+    public void bypassArmorForBlast(EntityDamageByEntityEvent event)
+    {
+        if(event.getDamager() instanceof Player)
+        {
+            ItemStack shield = ((Player)event.getDamager()).getInventory().getItemInOffHand();
+            if(shield != null && shield.hasItemMeta())
+            {
+                if(shield.getItemMeta().getDisplayName().equals("§1§l§oSkulk Shield"))
+                {
+                    if(((Player)event.getDamager()).getPersistentDataContainer().has(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER))
+                        if(((Player)event.getDamager()).getPersistentDataContainer().get(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER) > 120*LimitsPlugin.scheduleScale-2)
+                            event.setDamage(DamageModifier.ARMOR, 0);
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -74,7 +94,7 @@ public class SkulkShield implements Listener
 
         for(int i = 0; i < 20; i++)
         {
-            Location boom = player.getLocation().add(player.getLocation().getDirection().multiply(i/2.0));
+            Location boom = player.getLocation().add(player.getLocation().getDirection().multiply(i/2.0)).add(0, 1, 0);
             List<Entity> nearbyE = getNearbyEntities(boom, 1);
             ArrayList<LivingEntity> livingE = new ArrayList<LivingEntity>();
 
@@ -83,7 +103,7 @@ public class SkulkShield implements Listener
                 if (e instanceof LivingEntity)
                 {
                     if(e != player)
-                        ((LivingEntity)e).damage(6, player);
+                        ((LivingEntity)e).damage(7, player);
                 }
             }
             player.getWorld().spawnParticle(Particle.SONIC_BOOM, boom, 1, 0.05, 0.05, 0.05, 0);

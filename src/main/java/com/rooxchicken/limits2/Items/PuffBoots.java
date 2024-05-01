@@ -4,6 +4,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -16,8 +17,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import com.rooxchicken.limits2.LimitsPlugin;
-
-import org.bukkit.entity.Player;
 
 public class PuffBoots implements Listener
 {
@@ -111,7 +110,7 @@ public class PuffBoots implements Listener
         {
             if(boots.getItemMeta().getDisplayName().equals("Â§fÂ§lÂ§oPuff Boots"))
             {
-                message = "âÿÿ ";
+                message = "â˜ ";
                 if(puffBootsCooldown <= 0)
                     message += "READY";
                 else
