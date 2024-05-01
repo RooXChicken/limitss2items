@@ -14,6 +14,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.data.type.Bed.Part;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,6 +26,8 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
@@ -109,8 +112,8 @@ public class SkulkShield implements Listener
             player.getWorld().spawnParticle(Particle.SONIC_BOOM, boom, 1, 0.05, 0.05, 0.05, 0);
         }
 
-        player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
-        player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
+        Entity xp = player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB);
+        ((ExperienceOrb)xp).setExperience(3);
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WARDEN_SONIC_BOOM, 1, 1);
 
@@ -170,12 +173,15 @@ public class SkulkShield implements Listener
                 else
                     message += (skulkShieldCooldown/LimitsPlugin.scheduleScale+1) + "s";
 
-                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(24.0);
+                if(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() != 24.0)
+                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(24.0);
             }
             else
+            if(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() != 20.0)
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
         }
         else
+        if(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() != 20.0)
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
 
         return message;
