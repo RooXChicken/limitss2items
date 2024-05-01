@@ -1,0 +1,13 @@
+main: com.rooxchicken.limits2.LimitsPlugin
+name: Limits2
+version: 0.1
+api-version: '1.20'
+
+commands:
+   limitsgive:
+      description: Gives the custom Limits items
+      usage: /limitsgive
+
+   resetcooldown:
+      description: Resets the item cooldown
+      usage: /resetcooldown
