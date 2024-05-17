@@ -2,9 +2,11 @@ package com.rooxchicken.limits2;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.google.common.base.Predicate;
 
 import org.apache.commons.io.filefilter.CanExecuteFileFilter;
 import org.bukkit.Bukkit;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -35,6 +37,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.BlockIterator;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import com.rooxchicken.limits2.Commands.LimitsGive;
@@ -143,46 +146,22 @@ public class LimitsPlugin extends JavaPlugin implements Listener
             return;
     }
 
-    public static Entity getTarget(Player player, int range)
+    public static Entity getTarget(final Player player, int range)
     {
-        List<Entity> nearbyE = player.getNearbyEntities(range, range, range);
-        ArrayList<LivingEntity> livingE = new ArrayList<LivingEntity>();
-
-        for (Entity e : nearbyE) {
-            if (e instanceof LivingEntity) {
-                livingE.add((LivingEntity) e);
-            }
-        }
-
-        Entity target = null;
-        BlockIterator bItr = new BlockIterator(player, range);
-        Block block;
-        Location loc;
-        int bx, by, bz;
-        double ex, ey, ez;
-        // loop through player's line of sight
-        while (bItr.hasNext())
+        Predicate<Entity> p = new Predicate<Entity>()
         {
-            block = bItr.next();
-            bx = block.getX();
-            by = block.getY();
-            bz = block.getZ();
-
-            for (LivingEntity e : livingE)
+            @Override
+            public boolean apply(Entity input)
             {
-                loc = e.getLocation();
-                ex = loc.getX();
-                ey = loc.getY();
-                ez = loc.getZ();
-                if ((bx-.75 <= ex && ex <= bx+1.75) && (bz-.75 <= ez && ez <= bz+1.75) && (by-1 <= ey && ey <= by+2.5))
-                {
-                    // entity is close enough, set target and stop
-                    target = e;
-                    break;
-                }
+                return(input != player);
             }
-        }
-
-        return target;
+            
+        };
+        RayTraceResult ray = player.getWorld().rayTrace(player.getEyeLocation(), player.getLocation().getDirection(), range, FluidCollisionMode.NEVER, true, 0.2, p);
+        
+        if(ray != null)
+            return ray.getHitEntity();
+        else
+            return null;
     }
 }

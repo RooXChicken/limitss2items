@@ -99,10 +99,9 @@ public class SkulkShield implements Listener
         for(int i = 0; i < 20; i++)
         {
             Location boom = player.getLocation().add(player.getLocation().getDirection().multiply(i/2.0)).add(0, 1, 0);
-            List<Entity> nearbyE = getNearbyEntities(boom, 1);
-            ArrayList<LivingEntity> livingE = new ArrayList<LivingEntity>();
+            Object[] nearbyE = getNearbyEntities(boom, 2);
 
-            for (Entity e : nearbyE)
+            for (Object e : nearbyE)
             {
                 if (e instanceof LivingEntity)
                 {
@@ -123,34 +122,14 @@ public class SkulkShield implements Listener
         
     }
 
-    public static List<Entity> getNearbyEntities(Location where, int range)
+    public static Object[] getNearbyEntities(Location where, int range)
     {
-        List<Entity> found = new ArrayList<Entity>();
-         
-        for (Entity entity : where.getWorld().getEntities())
-        {
-            if (isInBorder(where, entity.getLocation(), range))
-                found.add(entity);
-        }
-
-        return found;
-    }
-
-    public static boolean isInBorder(Location center, Location notCenter, int range)
-    {
-        int x = center.getBlockX(), z = center.getBlockZ();
-        int x1 = notCenter.getBlockX(), z1 = notCenter.getBlockZ();
-            
-        if (x1 >= (x + range) || z1 >= (z + range) || x1 <= (x - range) || z1 <= (z - range))
-        {
-            return false;
-        }
-
-        return true;
+        return where.getWorld().getNearbyEntities(where, range, range, range).toArray();
     }
 
     public String handleSkulkShield(Player player, PersistentDataContainer container)
     {
+        boolean hasShield = false;
         String message = "";
    
         if(!container.has(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER))
@@ -174,15 +153,16 @@ public class SkulkShield implements Listener
                 else
                     message += (skulkShieldCooldown/LimitsPlugin.scheduleScale+1) + "s";
 
-                if(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() != 24.0)
-                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(24.0);
+                hasShield = true;
             }
-            else
-            if(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() != 20.0)
-                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
         }
-        else
-        if(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() != 20.0)
+
+        if(hasShield)
+        {
+            if(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() != 24.0)
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(24.0);
+        }
+        else if(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() != 20.0)
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
 
         return message;
