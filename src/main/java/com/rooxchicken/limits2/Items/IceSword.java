@@ -77,7 +77,7 @@ public class IceSword implements Listener
         if(event.getItem() == null || !event.getItem().hasItemMeta())
             return;
 
-        if(event.getItem().getItemMeta().getDisplayName().equals("§b§l§oIce Sword"))
+        if(event.getItem().getItemMeta().getDisplayName().equals("§b§l§oIce Sword") || event.getItem().getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword"))
         {
             Player player = event.getPlayer();
             if(player.getPersistentDataContainer().has(LimitsPlugin.iceSwordCooldownKey, PersistentDataType.INTEGER))
@@ -155,19 +155,30 @@ public class IceSword implements Listener
 
         container.set(LimitsPlugin.iceSwordCooldownKey, PersistentDataType.INTEGER, iceSwordCooldown);
         
+        boolean display = false;
         ItemStack hand = player.getInventory().getItemInMainHand();
         if(hand != null && hand.hasItemMeta())
         {
-            if(hand.getItemMeta().getDisplayName().equals("§b§l§oIce Sword"))
+            if(hand.getItemMeta().getDisplayName().equals("§b§l§oIce Sword") || hand.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword"))
             {
-                message = ChatColor.AQUA + "❄ ";
-                if(iceSwordCooldown <= 0)
-                    message += "READY";
-                else
-                    message += (iceSwordCooldown/LimitsPlugin.scheduleScale+1) + "s";
-
+                display = true;
                 hasSword = true;
             }
+        }
+
+        for(ItemStack item : player.getInventory().getContents())
+        {
+            if(item != null && item.hasItemMeta() && (item.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword")))
+                display = true;
+        }
+
+        if(display)
+        {
+            message = ChatColor.AQUA + "❄ ";
+            if(iceSwordCooldown <= 0)
+                message += "READY";
+            else
+                message += (iceSwordCooldown/LimitsPlugin.scheduleScale+1) + "s";
         }
 
         if(!hasSword)

@@ -46,7 +46,7 @@ public class MoltenAxe implements Listener
             ItemStack axe = source.getInventory().getItemInMainHand();
             if(axe != null && axe.hasItemMeta())
             {
-                if(axe.getItemMeta().getDisplayName().equals("§x§F§F§7§7§0§0§l§oMolten Axe"))
+                if(axe.getItemMeta().getDisplayName().equals("§x§F§F§7§7§0§0§l§oMolten Axe") || axe.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword"))
                 {
                     if(Math.random() < 0.25)
                         event.getEntity().setFireTicks(160);
@@ -69,8 +69,12 @@ public class MoltenAxe implements Listener
         if((player.getInventory().getItemInOffHand() != null && player.getInventory().getItemInOffHand().hasItemMeta() && player.getInventory().getItemInOffHand().getItemMeta().getDisplayName().equals("§1§l§oSkulk Shield")) && player.isSneaking())
             return;
 
-        if(event.getItem().getItemMeta().getDisplayName().equals("§x§F§F§7§7§0§0§l§oMolten Axe"))
+        if(event.getItem().getItemMeta().getDisplayName().equals("§x§F§F§7§7§0§0§l§oMolten Axe") || event.getItem().getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword"))
         {
+            if(event.getItem().getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword"))
+                if(player.isSneaking())
+                    return;
+                    
             PersistentDataContainer container = player.getPersistentDataContainer();
             if(!container.has(LimitsPlugin.moltenAxeCooldownKey, PersistentDataType.INTEGER))
                 container.set(LimitsPlugin.moltenAxeCooldownKey, PersistentDataType.INTEGER, 0);
@@ -108,19 +112,26 @@ public class MoltenAxe implements Listener
 
         container.set(LimitsPlugin.moltenAxeCooldownKey, PersistentDataType.INTEGER, moltenAxeCooldown);
         
+        boolean display = false;
         ItemStack axe = player.getInventory().getItemInMainHand();
-        if(axe != null && axe.hasItemMeta())
-        {
-            if(axe.getItemMeta().getDisplayName().equals("§x§F§F§7§7§0§0§l§oMolten Axe"))
-            {
-                message = "§x§F§F§7§7§0§0⚡ ";
-                if(moltenAxeCooldown <= 0)
-                    message += "READY";
-                else
-                    message += (moltenAxeCooldown/LimitsPlugin.scheduleScale+1) + "s";
+        if(axe != null && axe.hasItemMeta() && axe.getItemMeta().getDisplayName().equals("§x§F§F§7§7§0§0§l§oMolten Axe"))
+            display = true;
 
-                player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 19, 0, true));
-            }
+        for(ItemStack item : player.getInventory().getContents())
+        {
+            if(item != null && item.hasItemMeta() && (item.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword")))
+                display = true;
+        }
+
+        if(display)
+        {
+            message = "§x§F§F§7§7§0§0⚡ ";
+            if(moltenAxeCooldown <= 0)
+                message += "READY";
+            else
+                message += (moltenAxeCooldown/LimitsPlugin.scheduleScale+1) + "s";
+
+            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 19, 0, true));
         }
 
         return message;

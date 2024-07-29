@@ -52,15 +52,22 @@ public class SkulkShield implements Listener
     {
         if(event.getDamager() instanceof Player)
         {
+            boolean check = false;
             ItemStack shield = ((Player)event.getDamager()).getInventory().getItemInOffHand();
             if(shield != null && shield.hasItemMeta())
-            {
                 if(shield.getItemMeta().getDisplayName().equals("§1§l§oSkulk Shield"))
-                {
-                    if(((Player)event.getDamager()).getPersistentDataContainer().has(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER))
-                        if(((Player)event.getDamager()).getPersistentDataContainer().get(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER) > 120*LimitsPlugin.scheduleScale-2)
-                            event.setDamage(DamageModifier.ARMOR, 0);
-                }
+                    check = true;
+
+            ItemStack sword = ((Player)event.getDamager()).getInventory().getItemInMainHand();
+            if(sword != null && sword.hasItemMeta() && sword.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword"))
+                check = true;
+
+
+            if(check)
+            {
+                if(((Player)event.getDamager()).getPersistentDataContainer().has(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER))
+                    if(((Player)event.getDamager()).getPersistentDataContainer().get(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER) > 120*LimitsPlugin.scheduleScale-2)
+                        event.setDamage(DamageModifier.ARMOR, 0);
             }
         }
     }
@@ -75,13 +82,19 @@ public class SkulkShield implements Listener
 
         if(!player.isSneaking())
             return;
+
+        boolean cancel = true;
         
         ItemStack shield = player.getInventory().getItemInOffHand();
-        if(shield == null || !shield.hasItemMeta())
-            return;
+        if(shield != null && shield.hasItemMeta() && shield.getItemMeta().getDisplayName().equals("§1§l§oSkulk Shield"))
+            cancel = false;
 
-        if(!shield.getItemMeta().getDisplayName().equals("§1§l§oSkulk Shield"))
-            return;
+        if(cancel)
+        {
+            ItemStack sword = player.getInventory().getItemInMainHand();
+            if(sword != null && sword.hasItemMeta() && sword.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword"))
+                cancel = false;
+        }
 
         PersistentDataContainer container = player.getPersistentDataContainer();
         if(!container.has(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER))
@@ -129,7 +142,6 @@ public class SkulkShield implements Listener
 
     public String handleSkulkShield(Player player, PersistentDataContainer container)
     {
-        boolean hasShield = false;
         String message = "";
    
         if(!container.has(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER))
@@ -142,22 +154,31 @@ public class SkulkShield implements Listener
 
         container.set(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER, skulkShieldCooldown);
         
+        boolean check = false;
+        boolean giveHealth = false;
+
         ItemStack shield = player.getInventory().getItemInOffHand();
         if(shield != null && shield.hasItemMeta())
-        {
             if(shield.getItemMeta().getDisplayName().equals("§1§l§oSkulk Shield"))
-            {
-                message = ChatColor.DARK_BLUE + "🛡 ";
-                if(skulkShieldCooldown <= 0)
-                    message += "READY";
-                else
-                    message += (skulkShieldCooldown/LimitsPlugin.scheduleScale+1) + "s";
+                check = true;
 
-                hasShield = true;
-            }
+        for(ItemStack item : player.getInventory().getContents())
+        {
+            if(item != null && item.hasItemMeta() && (item.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword")))
+                check = true;
         }
 
-        if(hasShield)
+        if(check)
+        {
+            giveHealth = true;
+            message = ChatColor.DARK_BLUE + "🛡 ";
+            if(skulkShieldCooldown <= 0)
+                message += "READY";
+            else
+                message += (skulkShieldCooldown/LimitsPlugin.scheduleScale+1) + "s";
+        }
+
+        if(giveHealth)
         {
             if(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() != 24.0)
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(24.0);

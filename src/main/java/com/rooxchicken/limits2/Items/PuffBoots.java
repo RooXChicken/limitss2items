@@ -1,5 +1,6 @@
 package com.rooxchicken.limits2.Items;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
@@ -37,6 +38,12 @@ public class PuffBoots implements Listener
             if(boots.getItemMeta().getDisplayName().equals("§f§l§oPuff Boots"))
                 allowFlight = true;
         }
+
+        for(ItemStack item : player.getInventory().getContents())
+        {
+            if(item != null && item.hasItemMeta() && (item.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword")))
+                allowFlight = true;
+        }
         
         player.setAllowFlight(allowFlight);
     }
@@ -44,10 +51,20 @@ public class PuffBoots implements Listener
     @EventHandler
     public void cancelFallIfBoots(EntityDamageEvent event)
     {
-        if(event.getCause() != DamageCause.FALL || event.getEntityType() != EntityType.PLAYER || ((Player)event.getEntity()).getInventory().getBoots() == null)
+        if(event.getCause() != DamageCause.FALL || event.getEntityType() != EntityType.PLAYER)
             return;
 
-        event.setCancelled(((Player)event.getEntity()).getInventory().getBoots().getItemMeta().getDisplayName().equals("§f§l§oPuff Boots"));
+        Player player = (Player)event.getEntity();
+
+        boolean cancel = false;
+
+        for(ItemStack item : player.getInventory().getContents())
+        {
+            if(item != null && item.hasItemMeta() && (item.getItemMeta().getDisplayName().equals("§f§l§oPuff Boots") || item.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword")))
+                cancel = true;
+        }
+        
+        event.setCancelled(cancel);
     }
 
     @EventHandler
@@ -59,11 +76,22 @@ public class PuffBoots implements Listener
         event.setCancelled(true);
         Player player = event.getPlayer();
         player.setFlying(false);
-        ItemStack boots = player.getInventory().getBoots();
-        if(boots == null || !boots.hasItemMeta())
-            return;
 
-        if(!boots.getItemMeta().getDisplayName().equals("§f§l§oPuff Boots"))
+        boolean cancel = true;
+        ItemStack boots = player.getInventory().getBoots();
+        if(boots != null && boots.hasItemMeta() && boots.getItemMeta().getDisplayName().equals("§f§l§oPuff Boots"))
+            cancel = false;
+
+        if(cancel)
+        {
+            for(ItemStack item : player.getInventory().getContents())
+            {
+                if(item != null && item.hasItemMeta() && (item.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword")))
+                    cancel = false;
+            }
+        }
+
+        if(cancel)
             return;
 
         PersistentDataContainer container = player.getPersistentDataContainer();
@@ -106,17 +134,25 @@ public class PuffBoots implements Listener
 
         container.set(LimitsPlugin.puffBootsCooldownKey, PersistentDataType.INTEGER, puffBootsCooldown);
         
+        boolean display = false;
         ItemStack boots = player.getInventory().getBoots();
         if(boots != null && boots.hasItemMeta())
-        {
             if(boots.getItemMeta().getDisplayName().equals("§f§l§oPuff Boots"))
-            {
-                message = ChatColor.WHITE + "☁ ";
-                if(puffBootsCooldown <= 0)
-                    message += "READY";
-                else
-                    message += (puffBootsCooldown/LimitsPlugin.scheduleScale+1) + "s";
-            }
+               display = true;
+
+        for(ItemStack item : player.getInventory().getContents())
+        {
+            if(item != null && item.hasItemMeta() && (item.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword")))
+                display = true;
+        }
+
+        if(display)
+        {
+            message = ChatColor.WHITE + "☁ ";
+            if(puffBootsCooldown <= 0)
+                message += "READY";
+            else
+                message += (puffBootsCooldown/LimitsPlugin.scheduleScale+1) + "s";
         }
 
         return message;

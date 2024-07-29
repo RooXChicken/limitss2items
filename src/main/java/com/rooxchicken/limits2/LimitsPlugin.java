@@ -115,23 +115,23 @@ public class LimitsPlugin extends JavaPlugin implements Listener
                     String moltenAxeMessage = moltenAxeHandler.handleMoltenAxe(player, container);
 
                     finalMessage = puffBootsMessage;
-                    if(finalMessage != "" && iceSwordMessage != "")
+                    if(!finalMessage.equals("") && !iceSwordMessage.equals(""))
                         finalMessage += " | " + iceSwordMessage;
                     else
                         finalMessage += iceSwordMessage;
 
                         
-                    if(finalMessage != "" && moltenAxeMessage != "")
+                    if(!finalMessage.equals("") && !moltenAxeMessage.equals(""))
                         finalMessage += " | " + moltenAxeMessage;
                     else
                         finalMessage += moltenAxeMessage;
                         
-                    if(finalMessage != "" && skulkShieldMessage != "")
+                    if(!finalMessage.equals("") && !skulkShieldMessage.equals(""))
                         finalMessage += " | " + skulkShieldMessage;
                     else
                         finalMessage += skulkShieldMessage;
                     
-                    if(finalMessage != "")
+                    if(!finalMessage.equals(""))
                         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(finalMessage));
                 }
             }
