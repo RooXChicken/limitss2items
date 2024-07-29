@@ -96,6 +96,9 @@ public class SkulkShield implements Listener
                 cancel = false;
         }
 
+        if(cancel)
+            return;
+
         PersistentDataContainer container = player.getPersistentDataContainer();
         if(!container.has(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER))
             container.set(LimitsPlugin.skulkShieldCooldownKey, PersistentDataType.INTEGER, 0);
