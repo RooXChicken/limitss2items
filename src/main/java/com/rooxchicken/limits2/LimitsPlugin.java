@@ -1,10 +1,13 @@
 package com.rooxchicken.limits2;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import com.google.common.base.Predicate;
 
 import org.apache.commons.io.filefilter.CanExecuteFileFilter;
+import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.GameMode;
@@ -12,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.BanList.Type;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -21,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -144,6 +149,24 @@ public class LimitsPlugin extends JavaPlugin implements Listener
     {
         if(event.getItem() == null || !event.getItem().hasItemMeta())
             return;
+    }
+
+    @EventHandler
+    public void banPlayer(EntityDeathEvent event)
+    {
+        if(!(event.getEntity() instanceof Player) || event.getEntity().getKiller() == null)
+            return;
+
+        Player player = (Player)event.getEntity();
+        Player killer = player.getKiller();
+
+        ItemStack item = killer.getInventory().getItemInMainHand();
+
+        if(item != null && item.hasItemMeta() && (item.getItemMeta().getDisplayName().equals("§4§l§oLimiter Sword")))
+        {
+            //Bukkit.getBanList(Type.PROFILE).addBan((Object)player.getPlayerProfile(), "§4§lYou have been limited.", null, null);
+            player.ban("§4§lYou have been limited.", (Date)null, null);
+        }
     }
 
     public static Entity getTarget(final Player player, int range)
